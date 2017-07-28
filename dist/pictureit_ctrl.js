@@ -97,7 +97,17 @@ System.register(['lodash', 'app/plugins/sdk', './sprintf.js', './angular-sprintf
             var dataListLength = dataList.length;
             this.panel.valueMaps = [];
             for (var series = 0; series < dataListLength; series++) {
-              this.panel.valueMaps.push({ name: dataList[series].target, value: dataList[series].datapoints[dataList[series].datapoints.length - 1][0] });
+              var seriesLength = dataList[series].datapoints.length;
+              var dataVal = dataList[series].datapoints[seriesLength - 1][0];
+              if (seriesLength > 1) {
+                for (var i = seriesLength; i > 0; i--) {
+                  if (dataList[series].datapoints[i - 1][0] != null) {
+                    dataVal = dataList[series].datapoints[i - 1][0];
+                    break;
+                  }
+                }
+              }
+              this.panel.valueMaps.push({ name: dataList[series].target, value: dataVal });
             }
 
             this.render();
